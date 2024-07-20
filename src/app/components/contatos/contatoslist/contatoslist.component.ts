@@ -17,9 +17,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ContatoslistComponent {
   contatoLista: Contato[] = [];
-  filteredContatos: Contato[] = [];
+  contatosFiltrados: Contato[] = [];
   contatoEdit: Contato | null = null;
-  searchTerm: string = '';
+  filtraBusca: string = '';
 
   modalService = inject(MdbModalService);
   @ViewChild('modalContatoDetalhe') modalContatoDetalhe!: TemplateRef<any>;
@@ -49,7 +49,7 @@ export class ContatoslistComponent {
     this.contatoService.findAll().subscribe({
       next: (listaBack) => {
         this.contatoLista = listaBack;
-        this.filteredContatos = listaBack;
+        this.contatosFiltrados = listaBack;
       },
       error: () => {
         Swal.fire({
@@ -112,12 +112,12 @@ export class ContatoslistComponent {
   }
 
   search() {
-    if (this.searchTerm.trim() === '') {
-      this.filteredContatos = this.contatoLista;
+    if (this.filtraBusca.trim() === '') {
+      this.contatosFiltrados = this.contatoLista;
     } else {
-      this.filteredContatos = this.contatoLista.filter(contato =>
-        contato.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        contato.email.toLowerCase().includes(this.searchTerm.toLowerCase())
+      this.contatosFiltrados = this.contatoLista.filter(contato =>
+        contato.nome.toLowerCase().includes(this.filtraBusca.toLowerCase()) ||
+        contato.email.toLowerCase().includes(this.filtraBusca.toLowerCase())
       );
     }
   }

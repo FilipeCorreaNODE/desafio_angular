@@ -40,7 +40,10 @@
             <br />
             <div class="form-group">
               <label for="favorito">Favorito</label>
-              <input type="text" id="favorito" class="form-control" formControlName="favorito" />
+              <select id="favorito" formControlName="favorito" class="form-control">
+                <option value="S">Sim</option>
+                <option value="N">Não</option>
+              </select>
               <div *ngIf="contatoForm.get('favorito')?.invalid && contatoForm.get('favorito')?.touched" class="text-danger">
                 Favorito deve ser 'S' ou 'N'.
               </div>

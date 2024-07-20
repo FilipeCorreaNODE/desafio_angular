@@ -19,67 +19,81 @@
 
           <div class="row mb-3">
             <div class="col-md-4">
-              <input type="text" class="form-control" placeholder="Buscar contato..." [(ngModel)]="searchTerm" (input)="search()">
+              <input type="text" class="form-control" placeholder="Buscar contato..." [(ngModel)]="filtraBusca" (input)="search()">
             </div>
           </div>
 
-          <table border="1" class="table table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>E-mail</th>
-                <th>Celular</th>
-                <th>Telefone</th>
-                <th>Favorito</th>
-                <th>Ativo</th>
-                <th>Data Cadastro</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let contato of filteredContatos; trackBy: trackById">
-                <td>{{ contato.id }}</td>
-                <td>{{ contato.nome }}</td>
-                <td>{{ contato.email }}</td>
-                <td>{{ contato.celular }}</td>
-                <td>{{ contato.telefone }}</td>
-                <td>{{ contato.favorito }}</td>
-                <td>
-                  <span *ngIf="contato.ativo === 's'; else inativo"
-                    class="badge badge-success rounded-pill d-inline">
-                    Sim
-                  </span>
-                  <ng-template #inativo>
-                    <span class="badge badge-danger rounded-pill d-inline">
-                      Não
+          <div class="table-responsive">
+            <table border="1" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Celular</th>
+                  <th>Telefone</th>
+                  <th>Favorito</th>
+                  <th>Ativo</th>
+                  <th>Data Cadastro</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let contato of contatosFiltrados; trackBy: trackById">
+                  <td>{{ contato.id }}</td>
+                  <td>{{ contato.nome }}</td>
+                  <td>{{ contato.email }}</td>
+                  <td>{{ contato.celular }}</td>
+                  <td>{{ contato.telefone }}</td>
+                  <td>
+                    <i
+                      *ngIf="contato.favorito === 'S'"
+                      class="fa fa-star"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      *ngIf="contato.favorito === 'N'"
+                      class="fa fa-star cinza"
+                      aria-hidden="true"
+                    ></i>
+                  </td>
+                  <td>
+                    <span *ngIf="contato.ativo === 's'; else inativo"
+                      class="badge badge-success rounded-pill d-inline">
+                      Sim
                     </span>
-                  </ng-template>
-                </td>
-                <td>{{ contato.dataHoraCadastro | date: 'dd/MM/yyyy HH:mm' }}</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-rounded btn-sm"
-                    mdbRipple
-                    rippleColor="dark"
-                    (click)="edit(contato)"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-danger btn-rounded btn-sm"
-                    mdbRipple
-                    rippleColor="dark"
-                    (click)="deleteById(contato)"
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <ng-template #inativo>
+                      <span class="badge badge-danger rounded-pill d-inline">
+                        Não
+                      </span>
+                    </ng-template>
+                  </td>
+                  <td>{{ contato.dataHoraCadastro | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-rounded btn-sm"
+                      mdbRipple
+                      rippleColor="dark"
+                      (click)="edit(contato)"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-rounded btn-sm"
+                      mdbRipple
+                      rippleColor="dark"
+                      (click)="deleteById(contato)"
+                    >
+                      Excluir
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>
@@ -93,7 +107,7 @@
       type="button"
       class="btn-close"
       aria-label="Close"
-      (click)="modal.close()"
+      (click)="modalRef.close()"
     ></button>
   </div>
   <div class="modal-body">

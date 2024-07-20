@@ -1,0 +1,24 @@
+
+
+.cinza {
+  color: gray; /* Cor da estrela vazia */
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    margin-bottom: 15px;
+  }
+
+  .btn-rounded {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+}
