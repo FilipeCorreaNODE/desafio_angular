@@ -1,1 +1,92 @@
-<p>contatoslist works!</p>
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+
+          <h3>Listagem de contatos</h3>
+
+          <div class="direita">
+            <button
+              type="button"
+              class="btn btn-primary btn-rounded"
+              mdbRipple
+              (click)="new()"
+            >
+              Novo
+            </button>
+          </div>
+          <br />
+
+          <table border="1" class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Celular</th>
+                <th>Telefone</th>
+                <th>Favorito</th>
+                <th>Ativo</th>
+                <th>Data Cadastro</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (contato of contatoLista; track $index) {
+              <tr>
+                <td>{{ contato.id }}</td>
+                <td>{{ contato.nome }}</td>
+                <td>{{ contato.email }}</td>
+                <td>{{ contato.celular }}</td>
+                <td>{{ contato.telefone }}</td>
+                <td>{{ contato.favorito }}</td>
+                <td>{{ contato.ativo }}</td>
+                <td>{{ contato.dataHoraCadastro }}</td>
+
+                <td class="direita">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-rounded"
+                    mdbRipple
+                    (click)="edit(contato)"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-rounded"
+                    mdbRipple
+                    (click)="deleteById(contato)"
+                  >
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalContatoDetalhe>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Agenda</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modalRef.close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+
+    <app-contatosdetails [contato]="contatoEdit" (retorno)="retornoDetalhe($event)"></app-contatosdetails>
+
+  </div>
+
+</ng-template>
