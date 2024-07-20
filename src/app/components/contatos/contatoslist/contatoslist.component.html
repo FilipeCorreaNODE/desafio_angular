@@ -4,7 +4,6 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-body">
-
           <h3>Listagem de contatos</h3>
 
           <div class="direita">
@@ -42,22 +41,32 @@
                 <td>{{ contato.celular }}</td>
                 <td>{{ contato.telefone }}</td>
                 <td>{{ contato.favorito }}</td>
-                <td>{{ contato.ativo }}</td>
+                @if(contato.ativo == 's') {
+                  <td>
+                    <span class="badge badge-success rounded-pill d-inline">{{ contato.ativo }}</span>
+                  </td>
+                } @else {
+                  <td>
+                    <span class="badge badge-danger rounded-pill d-inline">{{ contato.ativo }}</span>
+                  </td>
+                }
                 <td>{{ contato.dataHoraCadastro }}</td>
 
-                <td class="direita">
+                <td>
                   <button
                     type="button"
-                    class="btn btn-primary btn-rounded"
+                    class="btn btn-primary btn-rounded btn-sm"
                     mdbRipple
+                    rippleColor="dark"
                     (click)="edit(contato)"
                   >
                     Editar
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger btn-rounded"
+                    class="btn btn-danger btn-rounded btn-sm"
                     mdbRipple
+                    rippleColor="dark"
                     (click)="deleteById(contato)"
                   >
                     Excluir
@@ -84,9 +93,9 @@
     ></button>
   </div>
   <div class="modal-body">
-
-    <app-contatosdetails [contato]="contatoEdit" (retorno)="retornoDetalhe($event)"></app-contatosdetails>
-
+    <app-contatosdetails
+      [contato]="contatoEdit"
+      (retorno)="retornoDetalhe($event)"
+    ></app-contatosdetails>
   </div>
-
 </ng-template>
