@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ContatosdetailsComponent } from '../contatosdetails/contatosdetails.component';
@@ -6,17 +6,20 @@ import { Contato } from '../../../models/contato';
 import { ContatoService } from '../../../services/contato.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-contatoslist',
   standalone: true,
-  imports: [RouterLink,MdbModalModule,ContatosdetailsComponent,CommonModule],
+  imports: [RouterLink, MdbModalModule, ContatosdetailsComponent, CommonModule, FormsModule],
   templateUrl: './contatoslist.component.html',
-  styleUrl: './contatoslist.component.scss'
+  styleUrls: ['./contatoslist.component.scss']
 })
 export class ContatoslistComponent {
   contatoLista: Contato[] = [];
+  filteredContatos: Contato[] = [];
   contatoEdit: Contato | null = null;
+  searchTerm: string = '';
 
   modalService = inject(MdbModalService);
   @ViewChild('modalContatoDetalhe') modalContatoDetalhe!: TemplateRef<any>;
@@ -46,6 +49,7 @@ export class ContatoslistComponent {
     this.contatoService.findAll().subscribe({
       next: (listaBack) => {
         this.contatoLista = listaBack;
+        this.filteredContatos = listaBack;
       },
       error: () => {
         Swal.fire({
@@ -105,5 +109,16 @@ export class ContatoslistComponent {
   retornoDetalhe() {
     this.findAll();
     this.modalRef.close();
+  }
+
+  search() {
+    if (this.searchTerm.trim() === '') {
+      this.filteredContatos = this.contatoLista;
+    } else {
+      this.filteredContatos = this.contatoLista.filter(contato =>
+        contato.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        contato.email.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
   }
 }
