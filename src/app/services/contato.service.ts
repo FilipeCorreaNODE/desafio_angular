@@ -34,5 +34,8 @@ export class ContatoService {
     return this.http.get<Contato>(this.API + "/findById/"+id);
   }
 
+  existsByCelular(celular: string): Observable<boolean> {
+    return this.http.get<boolean>(this.API +"/existsByCelular/"+celular);
+  }
 
 }

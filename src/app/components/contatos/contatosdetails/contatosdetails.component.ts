@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Contato } from '../../../models/contato';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContatoService } from '../../../services/contato.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-contatosdetails',
@@ -30,7 +31,7 @@ export class ContatosdetailsComponent implements OnInit {
       id: [this.contato?.id],
       nome: [this.contato?.nome, Validators.required],
       email: [this.contato?.email, [Validators.required, Validators.email]],
-      celular: [this.contato?.celular, Validators.required],
+      celular: [this.contato?.celular, Validators.required, this.celularValidator.bind(this)],
       telefone: [this.contato?.telefone, Validators.required],
       favorito: [this.contato?.favorito, [Validators.required, Validators.pattern(/^[SN]$/)]],
       ativo: [this.contato?.ativo === 's'],
@@ -40,6 +41,12 @@ export class ContatosdetailsComponent implements OnInit {
     if (id) {
       this.findById(id);
     }
+  }
+
+  celularValidator(control: FormControl) {
+    return this.contatoService.existsByCelular(control.value).pipe(
+      map(exists => (exists ? { celularExists: true } : null))
+    );
   }
 
   findById(id: number) {
@@ -63,19 +70,19 @@ export class ContatosdetailsComponent implements OnInit {
       return;
     }
 
-    const contatoData = this.contatoForm.value;
-    contatoData.ativo = contatoData.ativo ? 's' : 'n';
+    const contatoDadosForm = this.contatoForm.value;
+    contatoDadosForm.ativo = contatoDadosForm.ativo ? 's' : 'n';
 
-    if (contatoData.id > 0) {
-      this.contatoService.update(contatoData, contatoData.id).subscribe({
+    if (contatoDadosForm.id > 0) {
+      this.contatoService.update(contatoDadosForm, contatoDadosForm.id).subscribe({
         next: (mensagem) => {
           Swal.fire({
             title: mensagem,
             icon: 'success',
             confirmButtonText: 'Ok',
           });
-          this.router.navigate(['admin/contatos'], { state: { contatoEditado: contatoData } });
-          this.retorno.emit(contatoData);
+          this.router.navigate(['admin/contatos'], { state: { contatoEditado: contatoDadosForm } });
+          this.retorno.emit(contatoDadosForm);
         },
         error: () => {
           Swal.fire({
@@ -88,15 +95,15 @@ export class ContatosdetailsComponent implements OnInit {
         },
       });
     } else {
-      this.contatoService.save(contatoData).subscribe({
+      this.contatoService.save(contatoDadosForm).subscribe({
         next: (mensagem) => {
           Swal.fire({
             title: mensagem,
             icon: 'success',
             confirmButtonText: 'Ok',
           });
-          this.router.navigate(['admin/contatos'], { state: { contatoNovo: contatoData } });
-          this.retorno.emit(contatoData);
+          this.router.navigate(['admin/contatos'], { state: { contatoNovo: contatoDadosForm } });
+          this.retorno.emit(contatoDadosForm);
         },
         error: () => {
           Swal.fire({

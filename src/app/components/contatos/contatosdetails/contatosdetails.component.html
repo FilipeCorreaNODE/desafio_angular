@@ -25,8 +25,11 @@
             <div class="form-group">
               <label for="celular">Celular</label>
               <input type="text" id="celular" class="form-control" formControlName="celular" />
-              <div *ngIf="contatoForm.get('celular')?.invalid && contatoForm.get('celular')?.touched" class="text-danger">
+              <div *ngIf="contatoForm.get('celular')?.errors?.['required'] && contatoForm.get('celular')?.touched" class="text-danger">
                 Celular é obrigatório.
+              </div>
+              <div *ngIf="contatoForm.get('celular')?.errors?.['celularExists'] && contatoForm.get('celular')?.touched" class="text-danger">
+                Celular já está cadastrado.
               </div>
             </div>
             <br />
@@ -45,7 +48,7 @@
                 <option value="N">Não</option>
               </select>
               <div *ngIf="contatoForm.get('favorito')?.invalid && contatoForm.get('favorito')?.touched" class="text-danger">
-                Favorito deve ser 'S' ou 'N'.
+                Favorito deve ser 'Sim' ou 'Não'.
               </div>
             </div>
             <br />
