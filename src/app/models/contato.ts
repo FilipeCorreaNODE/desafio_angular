@@ -4,7 +4,7 @@ export class Contato {
   email!: string;
   celular!: string;
   telefone!: string;
-  favorito!: string;
-  ativo!: string;
+  favorito!: 'S' | 'N';
+  ativo!: 's' | 'n';
   dataHoraCadastro!: string;
 }
