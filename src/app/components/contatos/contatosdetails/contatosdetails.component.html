@@ -28,9 +28,6 @@
               <div *ngIf="contatoForm.get('celular')?.errors?.['required'] && contatoForm.get('celular')?.touched" class="text-danger">
                 Celular é obrigatório.
               </div>
-              <div *ngIf="contatoForm.get('celular')?.errors?.['celularExists'] && contatoForm.get('celular')?.touched" class="text-danger">
-                Celular já está cadastrado.
-              </div>
             </div>
             <br />
             <div class="form-group">

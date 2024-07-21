@@ -31,7 +31,7 @@ export class ContatosdetailsComponent implements OnInit {
       id: [this.contato?.id],
       nome: [this.contato?.nome, Validators.required],
       email: [this.contato?.email, [Validators.required, Validators.email]],
-      celular: [this.contato?.celular, Validators.required, this.celularValidator.bind(this)],
+      celular: [this.contato?.celular, Validators.required],
       telefone: [this.contato?.telefone, Validators.required],
       favorito: [this.contato?.favorito, [Validators.required, Validators.pattern(/^[SN]$/)]],
       ativo: [this.contato?.ativo === 's'],
@@ -41,12 +41,6 @@ export class ContatosdetailsComponent implements OnInit {
     if (id) {
       this.findById(id);
     }
-  }
-
-  celularValidator(control: FormControl) {
-    return this.contatoService.existsByCelular(control.value).pipe(
-      map(exists => (exists ? { celularExists: true } : null))
-    );
   }
 
   findById(id: number) {
@@ -71,50 +65,72 @@ export class ContatosdetailsComponent implements OnInit {
     }
 
     const contatoDadosForm = this.contatoForm.value;
-    contatoDadosForm.ativo = contatoDadosForm.ativo ? 's' : 'n';
 
-    if (contatoDadosForm.id > 0) {
-      this.contatoService.update(contatoDadosForm, contatoDadosForm.id).subscribe({
-        next: (mensagem) => {
+    this.contatoService.existsByCelular(contatoDadosForm.celular).subscribe({
+      next: (exists) => {
+        if (exists && (!this.contato || this.contato.celular !== contatoDadosForm.celular)) {
           Swal.fire({
-            title: mensagem,
-            icon: 'success',
+            title: 'Celular já cadastrado',
+            text: 'Este número de celular já está cadastrado em outro contato.',
+            icon: 'warning',
             confirmButtonText: 'Ok',
           });
-          this.router.navigate(['admin/contatos'], { state: { contatoEditado: contatoDadosForm } });
-          this.retorno.emit(contatoDadosForm);
-        },
-        error: () => {
-          Swal.fire({
-            title: 'Ocorreu um erro',
-            icon: 'error',
-            confirmButtonText: 'Ok',
-          }).then(() => {
-            this.retorno.emit();
+          return;
+        }
+
+        contatoDadosForm.ativo = contatoDadosForm.ativo ? 's' : 'n';
+
+        if (contatoDadosForm.id > 0) {
+          this.contatoService.update(contatoDadosForm, contatoDadosForm.id).subscribe({
+            next: (mensagem) => {
+              Swal.fire({
+                title: mensagem,
+                icon: 'success',
+                confirmButtonText: 'Ok',
+              });
+              this.router.navigate(['admin/contatos'], { state: { contatoEditado: contatoDadosForm } });
+              this.retorno.emit(contatoDadosForm);
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Ocorreu um erro',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+              }).then(() => {
+                this.retorno.emit();
+              });
+            },
           });
-        },
-      });
-    } else {
-      this.contatoService.save(contatoDadosForm).subscribe({
-        next: (mensagem) => {
-          Swal.fire({
-            title: mensagem,
-            icon: 'success',
-            confirmButtonText: 'Ok',
+        } else {
+          this.contatoService.save(contatoDadosForm).subscribe({
+            next: (mensagem) => {
+              Swal.fire({
+                title: mensagem,
+                icon: 'success',
+                confirmButtonText: 'Ok',
+              });
+              this.router.navigate(['admin/contatos'], { state: { contatoNovo: contatoDadosForm } });
+              this.retorno.emit(contatoDadosForm);
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Ocorreu um erro',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+              }).then(() => {
+                this.retorno.emit();
+              });
+            },
           });
-          this.router.navigate(['admin/contatos'], { state: { contatoNovo: contatoDadosForm } });
-          this.retorno.emit(contatoDadosForm);
-        },
-        error: () => {
-          Swal.fire({
-            title: 'Ocorreu um erro',
-            icon: 'error',
-            confirmButtonText: 'Ok',
-          }).then(() => {
-            this.retorno.emit();
-          });
-        },
-      });
-    }
+        }
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Ocorreu um erro',
+          icon: 'error',
+          confirmButtonText: 'Ok',
+        });
+      },
+    });
   }
 }
