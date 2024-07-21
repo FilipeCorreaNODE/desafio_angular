@@ -1,11 +1,14 @@
-
+.table-responsive {
+  overflow-x: auto;
+}
 
 .cinza {
   color: gray; /* Cor da estrela vazia */
 }
 
-.table-responsive {
-  overflow-x: auto;
+.table-dark-header {
+  background-color: gray;
+  color: #fff;
 }
 
 @media (max-width: 768px) {

@@ -33,9 +33,6 @@
             <div class="form-group">
               <label for="telefone">Telefone</label>
               <input type="text" id="telefone" class="form-control" formControlName="telefone" />
-              <div *ngIf="contatoForm.get('telefone')?.invalid && contatoForm.get('telefone')?.touched" class="text-danger">
-                Telefone é obrigatório.
-              </div>
             </div>
             <br />
             <div class="form-group">

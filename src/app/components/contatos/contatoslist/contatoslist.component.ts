@@ -49,6 +49,7 @@ export class ContatoslistComponent {
     this.contatoService.findAll().subscribe({
       next: (listaBack) => {
         this.contatoLista = listaBack;
+        this.ordenaContatos();
         this.contatosFiltrados = listaBack;
       },
       error: () => {
@@ -120,5 +121,14 @@ export class ContatoslistComponent {
         contato.email.toLowerCase().includes(this.filtraBusca.toLowerCase())
       );
     }
+    this.ordenaContatosFiltrados();
+  }
+
+  ordenaContatos() {
+    this.contatoLista.sort((a, b) => a.nome.localeCompare(b.nome));
+  }
+
+  ordenaContatosFiltrados() {
+    this.contatosFiltrados.sort((a, b) => a.nome.localeCompare(b.nome));
   }
 }

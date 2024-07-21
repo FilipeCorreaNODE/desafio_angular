@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Contato } from '../../../models/contato';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContatoService } from '../../../services/contato.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-contatosdetails',
@@ -32,7 +31,7 @@ export class ContatosdetailsComponent implements OnInit {
       nome: [this.contato?.nome, Validators.required],
       email: [this.contato?.email, [Validators.required, Validators.email]],
       celular: [this.contato?.celular, Validators.required],
-      telefone: [this.contato?.telefone, Validators.required],
+      telefone: this.contato?.telefone,
       favorito: [this.contato?.favorito, [Validators.required, Validators.pattern(/^[SN]$/)]],
       ativo: [this.contato?.ativo === 's'],
     });
@@ -50,17 +49,14 @@ export class ContatosdetailsComponent implements OnInit {
         this.contatoForm.patchValue(this.contato);
       },
       error: () => {
-        Swal.fire({
-          title: 'Ocorreu um erro',
-          icon: 'error',
-          confirmButtonText: 'Ok',
-        });
+        this.showError('Ocorreu um erro');
       },
     });
   }
 
   save() {
     if (this.contatoForm.invalid) {
+      this.contatoForm.markAllAsTouched();
       return;
     }
 
@@ -92,13 +88,8 @@ export class ContatosdetailsComponent implements OnInit {
               this.retorno.emit(contatoDadosForm);
             },
             error: () => {
-              Swal.fire({
-                title: 'Ocorreu um erro',
-                icon: 'error',
-                confirmButtonText: 'Ok',
-              }).then(() => {
-                this.retorno.emit();
-              });
+              this.showError('Ocorreu um erro');
+              this.retorno.emit();
             },
           });
         } else {
@@ -113,24 +104,23 @@ export class ContatosdetailsComponent implements OnInit {
               this.retorno.emit(contatoDadosForm);
             },
             error: () => {
-              Swal.fire({
-                title: 'Ocorreu um erro',
-                icon: 'error',
-                confirmButtonText: 'Ok',
-              }).then(() => {
-                this.retorno.emit();
-              });
+              this.showError('Ocorreu um erro');
+            this.retorno.emit();
             },
           });
         }
       },
       error: () => {
-        Swal.fire({
-          title: 'Ocorreu um erro',
-          icon: 'error',
-          confirmButtonText: 'Ok',
-        });
+        this.showError('Ocorreu um erro');
       },
+    });
+  }
+
+  private showError(message: string) {
+    Swal.fire({
+      title: message,
+      icon: 'error',
+      confirmButtonText: 'Ok',
     });
   }
 }
