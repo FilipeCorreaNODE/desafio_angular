@@ -1,4 +1,4 @@
-import { Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MdbModalModule, MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ContatosdetailsComponent } from '../contatosdetails/contatosdetails.component';
