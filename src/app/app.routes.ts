@@ -11,7 +11,7 @@ export const routes: Routes = [
 
   {path: "admin",
     component: PrincipalComponent,
-    canActivate: [authGuard], // Guard adicionado
+    canActivate: [authGuard],
     children: [
     {path: "contatos", component: ContatoslistComponent },
     {path: "contatos/new", component: ContatosdetailsComponent },

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
@@ -17,7 +17,6 @@ export class LoginComponent {
   senha!: string;
 
   constructor(private authService: AuthService, private router: Router) {}
-
 
   logar() {
     if(this.usuario == 'admin' && this.senha == 'admin') {
